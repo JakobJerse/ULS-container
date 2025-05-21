@@ -1,0 +1,1 @@
+If you want to load in weights locally, you can put them in this folder, in a folder called nnUNet_results. For the baseline weights of the model that takes smaller input images, you can check Zenodo (https://zenodo.org/records/15226101). Simply unzip the nnUNet_results file and put it in this directory.
