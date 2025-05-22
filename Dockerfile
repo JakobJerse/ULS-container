@@ -3,41 +3,32 @@ FROM nvidia/cuda:12.2.0-runtime-ubuntu20.04 AS base
 RUN rm /etc/apt/sources.list.d/cuda.list
 
 RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+    apt-get install -y --no-install-recommends \
+      software-properties-common \
+      git wget unzip libopenblas-dev \
+      python3.10 python3.10-dev python3.10-venv python3.10-distutils \
+      nano && \
     add-apt-repository ppa:deadsnakes/ppa && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    git \
-    wget \
-    unzip \
-    libopenblas-dev \
-    python3.10 \
-    python3.10-dev \
-    python3-pip \
-    python3.10-distutils \
-    python3-distutils \
-    nano \
-    && \
     apt-get clean autoclean && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
-RUN python3.10 -m pip install --no-cache-dir --upgrade pip
+RUN python3.10 -m ensurepip --upgrade && \
+    python3.10 -m pip install --no-cache-dir --upgrade pip setuptools wheel
+
 COPY requirements.txt /tmp/requirements.txt
 RUN python3.10 -m pip install --no-cache-dir -r /tmp/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
 
 # Configure Git, clone the repository without checking out, then checkout the specific commit
 RUN git config --global advice.detachedHead false && \
-    git clone --no-checkout https://github.com/MIC-DKFZ/nnUNet.git /opt/algorithm/nnunet/ && \
-    cd /opt/algorithm/nnunet/ && \
-    # git checkout 947eafbb9adb5eb06b9171330b4688e006e6f301
+    git clone --depth 1 https://github.com/MIC-DKFZ/nnUNet.git /opt/algorithm/nnunet
+
 
 # Install a few dependencies that are not automatically installed
-RUN pip3 install \
+RUN python3.10 -m pip install --no-cache-dir \
     -e /opt/algorithm/nnunet \
-    graphviz \
-    onnx \
-    SimpleITK && \
+    graphviz onnx SimpleITK && \
     rm -rf ~/.cache/pip
 
 ### USER
