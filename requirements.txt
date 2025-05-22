@@ -1,11 +1,11 @@
-evalutils==0.4.2
-nibabel==5.1.0
-pillow==9.4.0
-numpy==1.24.4
-scikit-image==0.19.3
-scipy==1.10.1
-click==8.1.5
-batchgenerators==0.23
-blosc2==2.5.1
-acvl_utils==0.2
-torch==2.5.1
+evalutils==0.4.2                     # (no change; not in your freeze)
+nibabel==5.3.2                       # was 5.1.0 → match your venv
+pillow==11.2.1                       # was 9.4.0 → match your venv
+numpy==2.2.6                         # was 1.24.4 → match your venv
+scikit-image==0.25.2                 # was 0.19.3 → match your venv
+scipy==1.15.3                        # was 1.10.1 → match your venv
+click==8.1.5                         # (no change; not in your freeze)
+batchgenerators==0.23                # (no change; not in your freeze)
+blosc2==2.5.1                        # (no change; not in your freeze)
+acvl_utils==0.2                      # (no change; not in your freeze)
+torch==2.7.0                         # was 2.5.1 → match your venv

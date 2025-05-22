@@ -3,26 +3,26 @@ FROM nvidia/cuda:12.2.0-runtime-ubuntu20.04 AS base
 RUN rm /etc/apt/sources.list.d/cuda.list
 
 RUN apt-get update && \
-  apt-get install -y software-properties-common && \
-  add-apt-repository ppa:deadsnakes/ppa && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  git \
-  wget \
-  unzip \
-  libopenblas-dev \
-  python3.9 \
-  python3.9-dev \
-  python3-pip \
-  nano \
-  && \
-  apt-get clean autoclean && \
-  apt-get autoremove -y && \
-  rm -rf /var/lib/apt/lists/*
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    git \
+    wget \
+    unzip \
+    libopenblas-dev \
+    python3.10 \
+    python3.10-dev \
+    python3-pip \
+    nano \
+    && \
+    apt-get clean autoclean && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
-RUN python3.9 -m pip install --no-cache-dir --upgrade pip
+RUN python3.10 -m pip install --no-cache-dir --upgrade pip
 COPY requirements.txt /tmp/requirements.txt
-RUN python3.9 -m pip install --no-cache-dir -r /tmp/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
+RUN python3.10 -m pip install --no-cache-dir -r /tmp/requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
 
 # Configure Git, clone the repository without checking out, then checkout the specific commit
 RUN git config --global advice.detachedHead false && \
@@ -32,10 +32,10 @@ RUN git config --global advice.detachedHead false && \
 
 # Install a few dependencies that are not automatically installed
 RUN pip3 install \
-        -e /opt/algorithm/nnunet \
-        graphviz \
-        onnx \
-        SimpleITK && \
+    -e /opt/algorithm/nnunet \
+    graphviz \
+    onnx \
+    SimpleITK && \
     rm -rf ~/.cache/pip
 
 ### USER
@@ -70,4 +70,4 @@ ENV nnUNet_raw="/opt/algorithm/nnunet/nnUNet_raw" \
     nnUNet_preprocessed="/opt/algorithm/nnunet/nnUNet_preprocessed" \
     nnUNet_results="/opt/algorithm/nnunet/nnUNet_results"
 
-ENTRYPOINT [ "python3.9", "-m", "process" ]
+ENTRYPOINT [ "python3.10", "-m", "process" ]
